@@ -1,5 +1,5 @@
 whatis:
-  gyazo cmdline interface for windows.
+  gyazo interface to windows command prompt.
 
 usage:
   C:\>gyazocmd
