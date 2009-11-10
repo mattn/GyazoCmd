@@ -28,22 +28,22 @@ HWND GetConsoleHwnd(void) {
 }
 
 int GetEncoderClsid(const WCHAR* format, CLSID* pClsid) {
-   UINT num = 0, size = 0;
-   Gdiplus::GetImageEncodersSize(&num, &size);
-   if (size == 0) return -1;
+	UINT num = 0, size = 0;
+	Gdiplus::GetImageEncodersSize(&num, &size);
+	if (size == 0) return -1;
 
-   Gdiplus::ImageCodecInfo* ici = new Gdiplus::ImageCodecInfo[size];
-   if (ici == NULL) return -1;
+	Gdiplus::ImageCodecInfo* ici = new Gdiplus::ImageCodecInfo[size];
+	if (ici == NULL) return -1;
 
-   Gdiplus::GetImageEncoders(num, size, ici);
-   for(UINT n = 0; n < num; ++n) {
-      if (wcscmp(ici[n].MimeType, format) == 0) {
-         *pClsid = ici[n].Clsid;
-		 break;
-      }    
-   }
-   delete[] ici;
-   return -1;
+	Gdiplus::GetImageEncoders(num, size, ici);
+	for(UINT n = 0; n < num; ++n) {
+		if (wcscmp(ici[n].MimeType, format) == 0) {
+			*pClsid = ici[n].Clsid;
+			break;
+		}    
+	}
+	delete[] ici;
+	return -1;
 }
 
 bool SavePNG(LPCTSTR fileName, HBITMAP newBMP) {
@@ -117,28 +117,28 @@ bool UploadFile(LPCTSTR fileName) {
 
 	std::string oMsg(buf.str());
 	HINTERNET hSession = InternetOpen(_T("gyazocmd"), 
-		INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+			INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
 	if (NULL == hSession) {
 		std::cerr << "Can't configure wininet." << std::endl;
 		return false;
 	}
-	
+
 	HINTERNET hConnection = InternetConnect(hSession,
-		UPLOAD_SERVER, INTERNET_DEFAULT_HTTP_PORT,
-		NULL, NULL, INTERNET_SERVICE_HTTP, 0, NULL);
+			UPLOAD_SERVER, INTERNET_DEFAULT_HTTP_PORT,
+			NULL, NULL, INTERNET_SERVICE_HTTP, 0, NULL);
 	if (NULL == hSession) {
 		std::cerr << "Can't connect server." << std::endl;
 		return false;
 	}
 
 	HINTERNET hRequest = HttpOpenRequest(hConnection,
-		_T("POST"), UPLOAD_PATH, NULL,
-		NULL, NULL, INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RELOAD, NULL);
+			_T("POST"), UPLOAD_PATH, NULL,
+			NULL, NULL, INTERNET_FLAG_DONT_CACHE | INTERNET_FLAG_RELOAD, NULL);
 	if(NULL == hSession) {
 		std::cerr << "Can't compose post request." << std::endl;
 		return false;
 	}
-	
+
 	if (HttpSendRequest(hRequest,
 				szHeader,
 				lstrlen(szHeader),
@@ -156,7 +156,7 @@ bool UploadFile(LPCTSTR fileName) {
 			char  resbuf[1024];
 			std::string result;
 			while(InternetReadFile(hRequest, (LPVOID) resbuf, 1024, &len) 
-				&& len != 0) {
+					&& len != 0) {
 				result.append(resbuf, len);
 			}
 			std::cout << result << std::endl;
